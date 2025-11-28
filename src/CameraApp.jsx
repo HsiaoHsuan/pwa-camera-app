@@ -145,28 +145,44 @@ export default function CameraApp() {
       <main style={styles.main}>
         {/* 相機預覽區域 */}
         <div style={styles.cameraSection}>
-          {isCameraActive ? (
-            <>
-              <video
-                ref={videoRef}
-                autoPlay
-                playsInline
-                muted
-                style={styles.video}
-              />
-              <div style={styles.buttonGroup}>
+          {/* Video 元素始終存在，避免 ref 時序問題 */}
+          <video
+            ref={videoRef}
+            autoPlay
+            playsInline
+            muted
+            style={{
+              ...styles.video,
+              display: isCameraActive && !isPreviewMode ? 'block' : 'none'
+            }}
+          />
+          
+          {/* 預覽照片 */}
+          {isPreviewMode && previewPhoto && (
+            <img src={previewPhoto} alt="Preview" style={styles.preview} />
+          )}
+          
+          {/* 未啟動相機的提示 */}
+          {!isCameraActive && !isPreviewMode && (
+            <div style={styles.noCamera}>
+              <p style={{ fontSize: '48px', margin: '0' }}>📷</p>
+              <p>按下方按鈕啟動相機開始拍照</p>
+            </div>
+          )}
+          
+          {/* 按鈕組 */}
+          <div style={styles.buttonGroup}>
+            {isCameraActive && !isPreviewMode ? (
+              <>
                 <button onClick={takePhoto} style={styles.btnPrimary}>
                   📷 拍照
                 </button>
                 <button onClick={stopCamera} style={styles.btnSecondary}>
                   關閉相機
                 </button>
-              </div>
-            </>
-          ) : isPreviewMode && previewPhoto ? (
-            <>
-              <img src={previewPhoto} alt="Preview" style={styles.preview} />
-              <div style={styles.buttonGroup}>
+              </>
+            ) : isPreviewMode ? (
+              <>
                 <button onClick={startCamera} style={styles.btnSecondary}>
                   重新拍照
                 </button>
@@ -176,17 +192,13 @@ export default function CameraApp() {
                 >
                   返回相機
                 </button>
-              </div>
-            </>
-          ) : (
-            <div style={styles.noCamera}>
-              <p style={{ fontSize: '48px', margin: '0' }}>📷</p>
-              <p>按下方按鈕啟動相機開始拍照</p>
+              </>
+            ) : (
               <button onClick={startCamera} style={styles.btnPrimary}>
                 🎥 開啟相機
               </button>
-            </div>
-          )}
+            )}
+          </div>
         </div>
 
         {/* 照片庫 */}
