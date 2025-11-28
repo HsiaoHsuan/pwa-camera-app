@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef } from 'react';
 
 export default function CameraApp() {
   const videoRef = useRef(null);
@@ -80,13 +80,6 @@ export default function CameraApp() {
       setIsPreviewMode(false);
     }
   };
-
-  // 清理資源
-  useEffect(() => {
-    return () => {
-      stopCamera();
-    };
-  }, []);
 
   return (
     <div style={styles.container}>
