@@ -213,7 +213,7 @@ export default function CameraApp() {
               </>
             ) : isPreviewMode ? (
               <>
-                <button onClick={startCamera} style={styles.btnSecondary}>
+                <button onClick={() => startCamera(facingMode)} style={styles.btnSecondary}>
                   重新拍照
                 </button>
                 <button
@@ -224,7 +224,7 @@ export default function CameraApp() {
                 </button>
               </>
             ) : (
-              <button onClick={startCamera} style={styles.btnPrimary}>
+              <button onClick={() => startCamera(facingMode)} style={styles.btnPrimary}>
                 🎥 開啟相機
               </button>
             )}
