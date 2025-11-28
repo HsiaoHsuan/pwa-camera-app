@@ -8,17 +8,19 @@ export default function CameraApp() {
   const [errorMsg, setErrorMsg] = useState('');
   const [isPreviewMode, setIsPreviewMode] = useState(false);
   const [previewPhoto, setPreviewPhoto] = useState(null);
+  const [facingMode, setFacingMode] = useState('environment'); // 預設後鏡頭
 
   // 啟動相機
-  const startCamera = async () => {
+  const startCamera = async (preferredFacingMode = facingMode) => {
     try {
       setErrorMsg('');
       console.log('正在請求相機權限...');
+      console.log('使用鏡頭模式:', preferredFacingMode);
       
       // iOS 需要特別的設置
       const constraints = {
         video: {
-          facingMode: 'user',
+          facingMode: preferredFacingMode,
           width: { ideal: 1280 },
           height: { ideal: 720 }
         },
@@ -47,6 +49,7 @@ export default function CameraApp() {
             console.log('Video 正在播放');
             setIsCameraActive(true);
             setIsPreviewMode(false);
+            setFacingMode(preferredFacingMode); // 更新 facingMode 狀態
           } catch (err) {
             console.error('播放失敗:', err);
             setErrorMsg(`播放失敗: ${err.message}`);
@@ -62,6 +65,7 @@ export default function CameraApp() {
             console.log('Video 正在播放');
             setIsCameraActive(true);
             setIsPreviewMode(false);
+            setFacingMode(preferredFacingMode); // 更新 facingMode 狀態
           } catch (err) {
             console.error('直接播放失敗:', err);
             setErrorMsg(`播放失敗: ${err.message}`);
@@ -86,6 +90,29 @@ export default function CameraApp() {
       videoRef.current.srcObject.getTracks().forEach((track) => track.stop());
       setIsCameraActive(false);
       setIsPreviewMode(false);
+    }
+  };
+
+  // 切換鏡頭
+  const switchCamera = async () => {
+    try {
+      console.log('開始切換鏡頭...');
+      
+      // 停止當前 stream
+      if (videoRef.current && videoRef.current.srcObject) {
+        videoRef.current.srcObject.getTracks().forEach((track) => track.stop());
+        console.log('已停止當前相機流');
+      }
+
+      // 切換 facingMode
+      const newFacingMode = facingMode === 'user' ? 'environment' : 'user';
+      console.log('從', facingMode, '切換到', newFacingMode);
+
+      // 重新啟動相機
+      await startCamera(newFacingMode);
+    } catch (err) {
+      console.error('切換鏡頭失敗:', err);
+      setErrorMsg(`切換鏡頭失敗: ${err.message}`);
     }
   };
 
@@ -176,6 +203,9 @@ export default function CameraApp() {
               <>
                 <button onClick={takePhoto} style={styles.btnPrimary}>
                   📷 拍照
+                </button>
+                <button onClick={switchCamera} style={styles.btnSecondary}>
+                  🔄 切換鏡頭
                 </button>
                 <button onClick={stopCamera} style={styles.btnSecondary}>
                   關閉相機
