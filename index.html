@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="一個支援原生鏡頭拍照的 PWA 應用">
+  <meta name="theme-color" content="#2c3e50">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Camera">
+  
+  <link rel="manifest" href="/manifest.json">
+  <link rel="icon" type="image/png" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><rect fill='%232c3e50' width='180' height='180'/><text x='90' y='90' font-size='90' fill='white' text-anchor='middle' dominant-baseline='middle' font-family='system-ui'>📸</text></svg>">
+  <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><rect fill='%232c3e50' width='180' height='180' rx='40'/><text x='90' y='90' font-size='90' fill='white' text-anchor='middle' dominant-baseline='middle' font-family='system-ui'>📸</text></svg>">
+  
+  <title>PWA 相機應用 - 拍照工具</title>
+  
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    html, body {
+      width: 100%;
+      height: 100%;
+      font-family: system-ui, -apple-system, sans-serif;
+      background-color: #f5f7fa;
+    }
+    
+    #root {
+      width: 100%;
+      height: 100%;
+    }
+    
+    /* 避免體感延遲 */
+    button {
+      -webkit-user-select: none;
+      -webkit-touch-callout: none;
+      user-select: none;
+    }
+    
+    /* iOS 特定樣式 */
+    @supports (-webkit-touch-callout: none) {
+      input, textarea, select {
+        font-size: 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script type="module">
+    import { createRoot } from 'react-dom/client';
+    import React from 'react';
+    import CameraApp from './CameraApp.jsx';
+
+    const root = createRoot(document.getElementById('root'));
+    root.render(React.createElement(CameraApp));
+
+    // 註冊 Service Worker
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/service-worker.js')
+        .then((registration) => {
+          console.log('Service Worker 註冊成功:', registration);
+          
+          // 檢查更新
+          registration.addEventListener('updatefound', () => {
+            const newWorker = registration.installing;
+            newWorker.addEventListener('statechange', () => {
+              if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                console.log('新版本可用，刷新即可更新');
+              }
+            });
+          });
+        })
+        .catch((error) => {
+          console.log('Service Worker 註冊失敗:', error);
+        });
+
+      // 監聽控制權變更
+      navigator.serviceWorker.addEventListener('controllerchange', () => {
+        console.log('Service Worker 已更新');
+        window.location.reload();
+      });
+    }
+
+    // PWA 安裝提示
+    let deferredPrompt;
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      console.log('PWA 可以安裝');
+      
+      // 可以在這裡顯示安裝按鈕
+      // 例如：showInstallButton();
+    });
+
+    // 處理安裝成功
+    window.addEventListener('appinstalled', () => {
+      console.log('PWA 已安裝');
+      deferredPrompt = null;
+    });
+  </script>
+</body>
+</html>
