@@ -1,45 +1,8 @@
-# 依賴項
 node_modules/
-npm-debug.log
-yarn-error.log
-.npm
-.yarn
-.npmrc
-.yarnrc
-
-# 構建輸出
-build/
 dist/
-.next/
-out/
-
-# IDE
+*.log
+.DS_Store
 .vscode/
 .idea/
-*.swp
-*.swo
-*~
-.DS_Store
-.env.local
-.env.*.local
-
-# 測試覆蓋
-coverage/
-.nyc_output/
-
-# 臨時文件
-*.log
-.cache/
-.temp/
-
-# 開發工具
-lighthouse-report.html
-source-map-explorer.html
-
-# OS 文件
-Thumbs.db
-.DS_Store
-
-# 壓縮包
 *.tar.gz
 *.zip

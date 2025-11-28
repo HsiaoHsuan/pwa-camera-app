@@ -1,71 +1,14 @@
 <!DOCTYPE html>
 <html lang="zh-Hant-TW">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="PWA 相機應用 - 使用原生鏡頭拍照">
-  <meta name="theme-color" content="#2c3e50">
-  <title>PWA 相機應用</title>
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-    
-    html, body {
-      width: 100%;
-      height: 100%;
-      font-family: system-ui, -apple-system, sans-serif;
-      background-color: #f5f7fa;
-    }
-    
-    #root {
-      width: 100%;
-      height: 100%;
-    }
-    
-    button {
-      -webkit-user-select: none;
-      -webkit-touch-callout: none;
-      user-select: none;
-    }
-  </style>
-</head>
-<body>
-  <div id="root"></div>
-
-  <script type="module">
-    import { createRoot } from 'react-dom/client';
-    import React from 'react';
-    import CameraApp from './CameraApp.jsx';
-
-    const root = createRoot(document.getElementById('root'));
-    root.render(React.createElement(CameraApp));
-
-    // 註冊 Service Worker
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('./service-worker.js')
-        .then((registration) => {
-          console.log('Service Worker 註冊成功');
-        })
-        .catch((error) => {
-          console.log('Service Worker 註冊失敗:', error);
-        });
-    }
-
-    // PWA 安裝提示
-    let deferredPrompt;
-    window.addEventListener('beforeinstallprompt', (e) => {
-      e.preventDefault();
-      deferredPrompt = e;
-      console.log('PWA 可以安裝');
-    });
-
-    window.addEventListener('appinstalled', () => {
-      console.log('PWA 已安裝');
-      deferredPrompt = null;
-    });
-  </script>
-</body>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="PWA 相機應用 - 使用原生鏡頭拍照">
+    <meta name="theme-color" content="#2c3e50">
+    <title>PWA 相機應用</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
 </html>
