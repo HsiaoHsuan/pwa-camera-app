@@ -6,6 +6,14 @@
     <meta name="description" content="PWA 相機應用 - 使用原生鏡頭拍照">
     <meta name="theme-color" content="#2c3e50">
     <title>PWA 相機應用</title>
+    <!-- Eruda 行動裝置除錯工具 -->
+    <script src="https://cdn.jsdelivr.net/npm/eruda"></script>
+    <script>
+      // 自動初始化 eruda（僅在行動裝置或開發模式）
+      if (/mobile|android|iphone|ipad|ipod/i.test(navigator.userAgent) || location.hostname === 'localhost') {
+        eruda.init();
+      }
+    </script>
   </head>
   <body>
     <div id="root"></div>
