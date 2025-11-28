@@ -351,21 +351,3 @@ const styles = {
     display: 'none',
   },
 };
-
-// 添加懸停效果
-const style = document.createElement('style');
-style.textContent = `
-  div[style*="photoCard"]:hover > div[style*="photoActions"] {
-    opacity: 1 !important;
-  }
-  
-  button:hover {
-    opacity: 0.9;
-    transform: translateY(-1px);
-  }
-  
-  button:active {
-    transform: translateY(0);
-  }
-`;
-document.head.appendChild(style);
