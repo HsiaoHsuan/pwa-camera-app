@@ -28,41 +28,50 @@ export default function CameraApp() {
       const stream = await navigator.mediaDevices.getUserMedia(constraints);
       console.log('相機流已獲取:', stream);
       console.log('Stream tracks:', stream.getTracks());
+      console.log('videoRef.current 存在?', !!videoRef.current);
       
       if (videoRef.current) {
-        // 先設置狀態
-        setIsCameraActive(true);
-        setIsPreviewMode(false);
+        console.log('開始設置 video 元素...');
         
-        // 等待下一個渲染週期
-        await new Promise(resolve => setTimeout(resolve, 0));
-        
+        // 設置 stream 到 video
         videoRef.current.srcObject = stream;
         console.log('Stream 已設定到 video 元素');
+        console.log('Video readyState:', videoRef.current.readyState);
         
-        // iOS Safari 需要這些屬性
+        // 設置事件監聽器
         videoRef.current.onloadedmetadata = async () => {
           console.log('Video metadata 已加載');
           console.log('Video dimensions:', videoRef.current.videoWidth, 'x', videoRef.current.videoHeight);
           try {
             await videoRef.current.play();
             console.log('Video 正在播放');
+            setIsCameraActive(true);
+            setIsPreviewMode(false);
           } catch (err) {
             console.error('播放失敗:', err);
+            setErrorMsg(`播放失敗: ${err.message}`);
           }
         };
         
-        // 強制觸發 loadedmetadata
+        // 如果 metadata 已經加載完成
         if (videoRef.current.readyState >= 2) {
           console.log('Video 已就緒，立即播放');
+          console.log('Current dimensions:', videoRef.current.videoWidth, 'x', videoRef.current.videoHeight);
           try {
             await videoRef.current.play();
+            console.log('Video 正在播放');
+            setIsCameraActive(true);
+            setIsPreviewMode(false);
           } catch (err) {
             console.error('直接播放失敗:', err);
+            setErrorMsg(`播放失敗: ${err.message}`);
           }
         }
         
-        console.log('相機已啟動');
+        console.log('相機設置完成');
+      } else {
+        console.error('videoRef.current 為 null！');
+        setErrorMsg('無法存取 video 元素');
       }
     } catch (err) {
       console.error('相機錯誤:', err);
