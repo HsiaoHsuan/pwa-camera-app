@@ -8,9 +8,10 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="Camera">
+  <meta name="web-app-capable" content="yes">
   
-  <link rel="manifest" href="/manifest.json">
-  <link rel="icon" type="image/png" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><rect fill='%232c3e50' width='180' height='180'/><text x='90' y='90' font-size='90' fill='white' text-anchor='middle' dominant-baseline='middle' font-family='system-ui'>📸</text></svg>">
+  <link rel="manifest" href="./manifest.json">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><rect fill='%232c3e50' width='180' height='180'/><text x='90' y='90' font-size='90' fill='white' text-anchor='middle' dominant-baseline='middle' font-family='system-ui'>📸</text></svg>">
   <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><rect fill='%232c3e50' width='180' height='180' rx='40'/><text x='90' y='90' font-size='90' fill='white' text-anchor='middle' dominant-baseline='middle' font-family='system-ui'>📸</text></svg>">
   
   <title>PWA 相機應用 - 拍照工具</title>
@@ -62,7 +63,7 @@
 
     // 註冊 Service Worker
     if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('/service-worker.js')
+      navigator.serviceWorker.register('./service-worker.js')
         .then((registration) => {
           console.log('Service Worker 註冊成功:', registration);
           

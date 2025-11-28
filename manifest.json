@@ -2,8 +2,8 @@
   "name": "PWA Camera App",
   "short_name": "Camera",
   "description": "一個支援原生鏡頭拍照的 PWA 應用",
-  "start_url": "/",
-  "display": "standalone",
+  "start_url": "./",
+  "scope": "./",
   "background_color": "#ffffff",
   "theme_color": "#2c3e50",
   "orientation": "portrait-primary",
@@ -35,7 +35,7 @@
       "name": "開啟相機",
       "short_name": "拍照",
       "description": "快速開啟相機進行拍照",
-      "url": "/?action=camera",
+      "url": "./?action=camera",
       "icons": [
         {
           "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 96 96'><rect fill='%233498db' width='96' height='96'/><text x='48' y='48' font-size='48' fill='white' text-anchor='middle' dominant-baseline='middle' font-family='system-ui'>📸</text></svg>",
