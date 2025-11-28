@@ -13,16 +13,37 @@ export default function CameraApp() {
   const startCamera = async () => {
     try {
       setErrorMsg('');
+      console.log('正在請求相機權限...');
+      
       const stream = await navigator.mediaDevices.getUserMedia({
-        video: { facingMode: 'user' },
+        video: { 
+          facingMode: 'user',
+          width: { ideal: 1280 },
+          height: { ideal: 720 }
+        },
         audio: false,
       });
+      
+      console.log('相機流已獲取:', stream);
+      
       if (videoRef.current) {
         videoRef.current.srcObject = stream;
+        console.log('Stream 已設定到 video 元素');
+        
+        // 確保 video 開始播放
+        videoRef.current.onloadedmetadata = () => {
+          console.log('Video metadata 已加載');
+          videoRef.current.play().catch(err => {
+            console.error('播放失敗:', err);
+          });
+        };
+        
         setIsCameraActive(true);
         setIsPreviewMode(false);
+        console.log('相機已啟動');
       }
     } catch (err) {
+      console.error('相機錯誤:', err);
       setErrorMsg(`無法存取相機: ${err.message}`);
       setIsCameraActive(false);
     }
@@ -99,6 +120,7 @@ export default function CameraApp() {
                 ref={videoRef}
                 autoPlay
                 playsInline
+                muted
                 style={styles.video}
               />
               <div style={styles.buttonGroup}>
@@ -220,9 +242,12 @@ const styles = {
   video: {
     width: '100%',
     maxWidth: '500px',
+    height: 'auto',
     borderRadius: '8px',
     marginBottom: '16px',
     backgroundColor: '#000',
+    display: 'block',
+    objectFit: 'cover',
   },
   preview: {
     width: '100%',
