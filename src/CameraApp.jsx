@@ -27,14 +27,23 @@ export default function CameraApp() {
       
       const stream = await navigator.mediaDevices.getUserMedia(constraints);
       console.log('相機流已獲取:', stream);
+      console.log('Stream tracks:', stream.getTracks());
       
       if (videoRef.current) {
+        // 先設置狀態
+        setIsCameraActive(true);
+        setIsPreviewMode(false);
+        
+        // 等待下一個渲染週期
+        await new Promise(resolve => setTimeout(resolve, 0));
+        
         videoRef.current.srcObject = stream;
         console.log('Stream 已設定到 video 元素');
         
         // iOS Safari 需要這些屬性
         videoRef.current.onloadedmetadata = async () => {
           console.log('Video metadata 已加載');
+          console.log('Video dimensions:', videoRef.current.videoWidth, 'x', videoRef.current.videoHeight);
           try {
             await videoRef.current.play();
             console.log('Video 正在播放');
@@ -45,7 +54,7 @@ export default function CameraApp() {
         
         // 強制觸發 loadedmetadata
         if (videoRef.current.readyState >= 2) {
-          // 如果已經加載，立即播放
+          console.log('Video 已就緒，立即播放');
           try {
             await videoRef.current.play();
           } catch (err) {
@@ -53,8 +62,6 @@ export default function CameraApp() {
           }
         }
         
-        setIsCameraActive(true);
-        setIsPreviewMode(false);
         console.log('相機已啟動');
       }
     } catch (err) {
@@ -258,16 +265,12 @@ const styles = {
     width: '100%',
     maxWidth: '500px',
     height: 'auto',
-    minHeight: '300px',
+    aspectRatio: '4/3',
     borderRadius: '8px',
     marginBottom: '16px',
     backgroundColor: '#000',
     display: 'block',
     objectFit: 'cover',
-    WebkitTransform: 'scaleX(-1)',
-    transform: 'scaleX(-1)',
-    WebkitAppearance: 'none',
-    appearance: 'none',
   },
   preview: {
     width: '100%',
