@@ -39,3 +39,7 @@ source-map-explorer.html
 # OS 文件
 Thumbs.db
 .DS_Store
+
+# 壓縮包
+*.tar.gz
+*.zip

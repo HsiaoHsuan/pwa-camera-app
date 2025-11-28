@@ -147,15 +147,31 @@ A: 打開應用 → 點擊分享 → 「加入主畫面」
 ### Q: 照片儲存位置？
 A: 下載的照片存儲在設備的「下載」文件夾中。
 
-## 許可
+## 部署
 
-MIT License
+### GitHub Pages
+如果要部署到 GitHub Pages，使用：
+```bash
+npm run build:gh
+```
+然后将 `dist` 文件夹推送到 GitHub 仓库的 `gh-pages` 分支。
 
-## 貢獻
+或者在 GitHub Actions 中使用此配置：
+```yaml
+- name: Build
+  run: npm run build:gh
 
-歡迎提交 Issue 和 Pull Request！
+- name: Deploy
+  uses: peaceiris/actions-gh-pages@v3
+  with:
+    github_token: ${{ secrets.GITHUB_TOKEN }}
+    publish_dir: ./dist
+```
 
----
+### Vercel
+部署到 Vercel 时自动检测 `vercel.json` 配置。
 
-**建立日期**: 2025
-**最後更新**: 2025
+### 本地服务器
+对于本地开发或自托管服务器，使用 `npm run build`，然后服务器应该配置为将所有路由指向 `index.html`。
+
+
